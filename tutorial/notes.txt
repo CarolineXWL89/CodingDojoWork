@@ -1,0 +1,18 @@
+Things to do for Django Review Work:
+
+Django Intro:
+1. Go through previously covered Django videos and take some video notes when I have time
+2. Do "Time Display" activity
+3. Do "Random Word Generator" activity
+4. Do "Survey Form" activity
+5. Do "Session Words (Optional)" activity
+6. Do "Amadon" activity
+
+Django:
+ORMs (Object Relational Mappers):
+1. Models are classes connected to the database
+	1. Instead of being SQL queries, they're objects linked together that lets Django create the SQL query themselves
+2. Purpose is to make simple join/link SQL queries faster and more concisely
+3. More complicated statements, directly write a query
+
+Models/Migrations:
