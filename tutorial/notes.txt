@@ -16,3 +16,76 @@ ORMs (Object Relational Mappers):
 3. More complicated statements, directly write a query
 
 Models/Migrations:
+Models:
+- classes written in models.py
+	1. from django.db import models
+	2. class [Class Name] (models.Model):
+	3. Add the fields
+	4. All column (data) types can be found here: https://docs.djangoproject.com/en/2.2/
+- These act as the database types/objects (i.e. what's stored)
+- Map out the information that each should store
+- Also here is where you'll map out the different relations (one-to-one; many-to-one; one-to-many, etc...)
+NOTE: every time the database changes (i.e. new information is added, fields are changed, etc...), CREATE A MIGRATION
+- Creating a migration basically puts whatever changes we had to any data into the database (sqlite)
+1. Go to main directory in project
+2. Run python manage.py makemigrations --> staging; Django looks at our code, finds changes, and formulates the correct Python code to actually do the migration
+3. Run python manage.py migrate --> actually applies No. 2; where SQL queries are built and is equivalent to forward engineering an ERD (entity relationship diagram)
+
+NOTES:
+1. NEVER delete migration files!
+2. ALWAYS run migrations every time there is a COMPLETE change in models.py (i.e. won't immediately delete; you can always revert!)
+3. SQLite is fast and locally stored; good for development
+4. Django ORM models and queries will ALWAYS be the same no matter which database is being used.
+
+Foreign Key Relationships:
+- One-to-many relationships are done using the ForeignKey field
+	--> Ex: class Author(models.Model): ...
+	--> class Book(models.Model):
+			...
+			author = models.ForeignKey(Author, related_name="books")
+		--> One author can have many books
+		--> Info about a book's author can be accessed as: some_book.author
+		--> To create a record that this has a foreign key relationship, you pass it into the create function:
+			--> Ex: this_author = Author.objects.get(id=2)
+				my_book = Book.objects.create(title="Little Women", author=this_author)
+
+				#also in one line:
+				--> my_book = Book.objects.create(title="Little Women", author=Author.objects.get(id=2))
+- Joins are done automatically (i.e. you don't have to run any additional queries to get info about the author)
+- Searching off a ForeignKey relationship:
+	--> Ex: this_author = Author.objects.get(id=2)
+		books = Book.objects.filter(author=this_author)
+
+		#one-line version:
+		--> books = Book.objects.filter(author=Author.objects.get(id=2))
+- Searching by a field in related object w/ double underscore:
+	--> Ex: books = Books.objects.filter(author__name="Louise May Alcott")
+	--> Ex: books = Book.objects.filter(author__name__startswith="Lou")
+- Reverse Look-Ups:
+	- Done w/ related_name field
+	--> Ex: w/ related_name field, Django placed that field on the author to hold info about all of their books
+		--> def index(request):
+				context = {"authors": Author.objects.all()}
+				return render(request, "books/index.html", context)
+	- V. useful when calling data to be displayed on the template
+
+Many-to-Many Relationships:
+- To use m-m relationships in SQL, must create 3rd linked table w/ foreign key relationships to 2 other tables
+- Django: if model includes ManyToManyField, auto-construct
+--> Ex: class Book(models.Model): ...
+--> class Publisher(models.Model):
+		...
+		books = models.ManyToManyFidle(Book, related_name="publishers")
+	--> b/c each publisher can publish many books + every book can be published by many publishers
+	--> DOES NOT MATTER (unlike FKey) which model has the MTMF --> Book model could've had field publishers instead (publishers = models.MTMF(Publisher, related_name="books")) 
+- Adding a relationship btw 2 existing records:
+	--> Ex: this_book = Book.objects.get(id=4)
+		this_publisher = Publisher.objects.get(id=2)
+		this_publisher.books.add(this_book)
+- See all books from a publisher is SAME as a reverse look-up on FKey relationship --> this_publisher.books.all() in views.py or this_publisher_books.all in template
+NOTE: MTMF are automatically symmetrical: anything added to one side is automatically added to the other side
+
+Django Shell:
+1. python manage.py shell --> starts shell
+2. from apps.[APP_NAME].models import * --> imports all classes from that part: from apps.Blogs.models import *
+3. Play around and manipulate database w/ commands from ORM commands: http://learn.codingdojo.com/m/13/4554/34000

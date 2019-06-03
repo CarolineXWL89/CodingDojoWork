@@ -19,7 +19,7 @@ from django.conf.urls import url, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', include('apps.first_app.urls')), #anything starting w/ [space] --> root is handled in first app url
+    url(r'^', include('apps.first_app.urls')), #anything starting w/ [space] --> root is handled in first app url
     url(r'^first_app/', include('apps.first_app.urls')),
 
     url(r'^blogs/', include('apps.blogs.urls'))
