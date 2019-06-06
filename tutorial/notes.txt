@@ -135,3 +135,6 @@ Django Shell:
 1. python manage.py shell --> starts shell
 2. from apps.[APP_NAME].models import * --> imports all classes from that part: from apps.Blogs.models import *
 3. Play around and manipulate database w/ commands from ORM commands: http://learn.codingdojo.com/m/13/4554/34000
+NOTE: def __str__ or __repr__ to handle print results for more readable results:
+--> def __str__/__repr__(self):
+		return "... {}... {}".format(self.[param], self.[param2], etc...)

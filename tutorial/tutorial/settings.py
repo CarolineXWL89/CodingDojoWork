@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.blogs',
     'apps.surveys',
     'apps.users',
+    'apps.user_login',
 ]
 
 MIDDLEWARE = [
