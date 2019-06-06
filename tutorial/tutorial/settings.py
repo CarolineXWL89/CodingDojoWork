@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apps.surveys',
     'apps.users',
     'apps.user_login',
+    'apps.dojo_ninjas',
 ]
 
 MIDDLEWARE = [
